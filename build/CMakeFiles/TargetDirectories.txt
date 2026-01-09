@@ -1,3 +1,0 @@
-C:/Users/rober/Documents/GitHub/Personal_projects/CrashRoyale/build/CMakeFiles/CrashRoyale.dir
-C:/Users/rober/Documents/GitHub/Personal_projects/CrashRoyale/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/rober/Documents/GitHub/Personal_projects/CrashRoyale/build/CMakeFiles/ZERO_CHECK.dir
