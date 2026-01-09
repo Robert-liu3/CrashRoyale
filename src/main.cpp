@@ -51,7 +51,22 @@ int main() {
 
     // 4. Prepare frame data
     FRAME_DATA frame = {};
-    dup.GetFrame(&frame);
+    hr = dup.GetFrame(&frame);
+
+    if (FAILED(hr)) {
+        std::cerr << "Failed to get frame. HRESULT=0x" << std::hex << hr << std::dec << "\n";
+    } else {
+        std::cout << "Frame captured successfully!\n";
+        std::cout << "Move rects: " << frame.MoveCount << "\n";
+        std::cout << "Dirty rects: " << frame.DirtyCount << "\n";
+
+        if (frame.Frame) {
+            D3D11_TEXTURE2D_DESC desc;
+            frame.Frame->GetDesc(&desc);
+            std::cout << "Frame size: " << desc.Width << "x" << desc.Height << "\n";
+            std::cout << "Format: " << desc.Format << "\n";
+        }
+    }
 
     // TODO: process frame (e.g., read pixels)
 
