@@ -3,3 +3,5 @@ build/
 
 # Editor backup files
 *~
+
+.vscode

@@ -1,8 +1,10 @@
 #include <iostream>
+#include <string>
 #include <Windows.h>
 #include <d3d11.h>
 #include <dxgi1_2.h>
-#include "windows/duplicationManager.h"
+#include "window_capture/duplicationManager.h"
+#include "window_capture/imageUtils.h"
 
 int main() {
     DUPLICATIONMANAGER dup;
@@ -51,26 +53,41 @@ int main() {
 
     // 4. Prepare frame data
     FRAME_DATA frame = {};
-    hr = dup.GetFrame(&frame);
 
-    if (FAILED(hr)) {
-        std::cerr << "Failed to get frame. HRESULT=0x" << std::hex << hr << std::dec << "\n";
-    } else {
-        std::cout << "Frame captured successfully!\n";
-        std::cout << "Move rects: " << frame.MoveCount << "\n";
-        std::cout << "Dirty rects: " << frame.DirtyCount << "\n";
 
+    for (int i = 0; i <3; i++) {
+        FRAME_DATA frame = {};
+        hr = dup.GetFrame(&frame);
+
+        if (FAILED(hr)) {
+            std::cerr << "Failed to get frame. HRESULT=0x" << std::hex << hr << std::dec << "\n";
+            continue;
+        } 
+        
         if (frame.Frame) {
+
             D3D11_TEXTURE2D_DESC desc;
             frame.Frame->GetDesc(&desc);
+
+
+            std::cout << "Frame captured successfully!\n";
             std::cout << "Frame size: " << desc.Width << "x" << desc.Height << "\n";
             std::cout << "Format: " << desc.Format << "\n";
+
+
+            std::wstring filename = std::wstring(L"screenshot_") + std::to_wstring(i) + L".png";
+
+            hr = ImageUtils::SaveTextureAsPNG(frame.Frame, context, filename.c_str());
+            if (SUCCEEDED(hr)) {
+                std::wcout << L"Saved " << filename << L"\n";
+            } else {
+                std::cerr << "Failed to save screenshot. HRESULT=0x"
+                      << std::hex << hr << std::dec << "\n";
+            }
         }
+        dup.DoneWithFrame();
     }
 
-    // TODO: process frame (e.g., read pixels)
-
-    dup.DoneWithFrame();
 
     // cleanup
     dup.Cleanup();
