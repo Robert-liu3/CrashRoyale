@@ -6,5 +6,6 @@ add_executable(
     src/window_capture/imageUtils.cpp
     src/window_capture/duplicationManager.cpp
     src/window_capture/screenCaptureApp.cpp
+    src/window_overlay/overlayWindow.cpp
 )
-target_link_libraries(CrashRoyale PRIVATE d3d11 dxgi)
+target_link_libraries(CrashRoyale PRIVATE d3d11 dxgi d2d1 dwmapi)
