@@ -42,7 +42,7 @@ bool OverlayWindow::CreateOverlayWindow() {
     
     // Create layered window
     m_hwnd = CreateWindowExW(
-        WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_NOACTIVATE | WS_EX_TRANSPARENT, //WS_EX_TRANSPARENT
+        WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_NOACTIVATE | WS_EX_TRANSPARENT,
         CLASS_NAME,
         L"Overlay",
         WS_POPUP,
