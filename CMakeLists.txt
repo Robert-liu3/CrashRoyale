@@ -8,4 +8,7 @@ add_executable(
     src/window_capture/screenCaptureApp.cpp
     src/window_overlay/overlayWindow.cpp
 )
-target_link_libraries(CrashRoyale PRIVATE d3d11 dxgi d2d1 dwmapi)
+target_compile_definitions(CrashRoyale PRIVATE
+    "CRASHROYALE_SOURCE_DIR=L\"${CMAKE_CURRENT_SOURCE_DIR}\""
+)
+target_link_libraries(CrashRoyale PRIVATE d3d11 dxgi d2d1 dwmapi windowscodecs)

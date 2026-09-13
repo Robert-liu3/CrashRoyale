@@ -76,7 +76,7 @@ HRESULT ImageUtils::SaveTextureAsPNG(ID3D11Texture2D* texture, ID3D11DeviceConte
     if (FAILED(hr)) goto cleanup;
 
     // Write pixels
-    UINT stride = desc.Width * 4; // 4 bytes per pixel (BGRA)
+    UINT stride = mapped.RowPitch; // Includes any padding between texture rows.
     UINT bufferSize = stride * desc.Height;
     hr = frameEncode->WritePixels(desc.Height, stride, bufferSize, (BYTE*)mapped.pData);
     if (FAILED(hr)) goto cleanup;

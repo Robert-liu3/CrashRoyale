@@ -7,11 +7,50 @@
 #include <iostream>           // std::cerr
 #include <chrono>             // sleep_for
 #include <cmath>              // std::sin
+#include <string>             // std::wstring
 
 #include "window_overlay/overlayWindow.h"
 #include "window_capture/duplicationManager.h"
+#include "window_capture/imageUtils.h"
 
 #pragma comment(lib, "d3d11.lib")
+
+const std::wstring datasetDirectory = std::wstring(CRASHROYALE_SOURCE_DIR) + L"/dataset";
+const std::wstring screenshotDirectory = datasetDirectory + L"/raw";
+
+bool EnsureDirectoryExists(const wchar_t* path) {
+    if (CreateDirectoryW(path, nullptr)) {
+        return true;
+    }
+
+    return GetLastError() == ERROR_ALREADY_EXISTS;
+}
+
+bool EnsureScreenshotFolderExists() {
+    return EnsureDirectoryExists(datasetDirectory.c_str()) &&
+           EnsureDirectoryExists(screenshotDirectory.c_str());
+}
+
+std::wstring BuildScreenshotPath(int screenshotIndex) {
+    return screenshotDirectory + L"/screenshot_" +
+           std::to_wstring(screenshotIndex) +
+           L".png";
+}
+
+bool FileExists(const std::wstring& path) {
+    DWORD attributes = GetFileAttributesW(path.c_str());
+    return attributes != INVALID_FILE_ATTRIBUTES &&
+           (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
+}
+
+int FindNextScreenshotIndex() {
+    int screenshotIndex = 0;
+    while (FileExists(BuildScreenshotPath(screenshotIndex))) {
+        screenshotIndex++;
+    }
+
+    return screenshotIndex;
+}
 
 int main() {
     // Create the overlay window object.
@@ -71,6 +110,15 @@ int main() {
 
         // This counter is only for moving the demo box around a little.
         int frameCounter = 0;
+        if (!EnsureScreenshotFolderExists()) {
+            std::cerr << "Failed to create dataset\\raw screenshot folder. Error: "
+                      << GetLastError() << "\n";
+            overlay.Close();
+            return;
+        }
+
+        int screenshotCounter = FindNextScreenshotIndex();
+        bool wasSKeyDown = false;
 
         // Capture loop:
         // repeatedly grab a desktop frame, then update overlay detections.
@@ -110,30 +158,45 @@ int main() {
 
             // At this point frameData.Frame contains the captured desktop texture.
             // You would normally analyze frameData.Frame here and produce detections.
+            bool isSKeyDown = (GetAsyncKeyState('S') & 0x8000) != 0;
+            if (isSKeyDown && !wasSKeyDown) {
+                std::wstring filename = BuildScreenshotPath(screenshotCounter++);
+                HRESULT saveHr = ImageUtils::SaveTextureAsPNG(
+                    frameData.Frame,
+                    context,
+                    filename.c_str()
+                );
 
-            std::vector<DetectionBox> boxes;
+                if (SUCCEEDED(saveHr)) {
+                    std::wcout << L"Saved " << filename << L"\n";
+                } else {
+                    std::cerr << "Failed to save screenshot. HRESULT=0x"
+                              << std::hex << saveHr << std::dec << "\n";
+                }
+            }
+            wasSKeyDown = isSKeyDown;
 
-            // Demo box: move it horizontally over time just so you can see updates happen.
-            DetectionBox box;
-            box.x = 200.0f + 150.0f * std::sin(frameCounter * 0.05f);
-            box.y = 200.0f;
-            box.width = 250.0f;
-            box.height = 150.0f;
-            box.label = L"Demo Box";
-            box.confidence = 1.0f;
-            box.color = RGB(255, 0, 0);
-            // box.x = 100.0f;          // Fixed top-left corner
-            // box.y = 100.0f;
-            // box.width = 400.0f;      // Large box
-            // box.height = 300.0f;
-            // box.label = L"TEST BOX";
+            /*BOX TEST START*/
+
+            // std::vector<DetectionBox> boxes;
+
+            // // Demo box: move it horizontally over time just so you can see updates happen.
+            // DetectionBox box;
+            // box.x = 200.0f + 150.0f * std::sin(frameCounter * 0.05f);
+            // box.y = 200.0f;
+            // box.width = 250.0f;
+            // box.height = 150.0f;
+            // box.label = L"Demo Box";
             // box.confidence = 1.0f;
-            // box.color = RGB(0, 255, 0);  // Bright green
+            // box.color = RGB(255, 0, 0);
 
-            boxes.push_back(box);
 
-            // Send the detections to the overlay for drawing.
-            overlay.UpdateDetections(boxes);
+            // boxes.push_back(box);
+
+            // // Send the detections to the overlay for drawing.
+            // overlay.UpdateDetections(boxes);
+
+            /*BOX TEST END*/
 
             // Release the acquired duplication frame.
             hr = dupl.DoneWithFrame();

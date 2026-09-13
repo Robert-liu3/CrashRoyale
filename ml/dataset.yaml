@@ -1,0 +1,11 @@
+# train.py resolves this path relative to this file.
+path: ../dataset
+train: images/train
+val: images/val
+
+# EXAMPLES: replace these with your annotation classes before training.
+# IDs must match the first number in each YOLO label row.
+names:
+  0: knight
+  1: giant
+  2: archers
