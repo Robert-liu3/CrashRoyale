@@ -171,18 +171,21 @@ int main() {
 
             try {
                 if (!frameData.Frame) throw std::runtime_error("Capture returned no texture.");
-                bool isSKeyDown = (GetAsyncKeyState('S') & 0x8000) != 0;
-                if (isSKeyDown && !wasSKeyDown) {
-                    std::wstring filename = BuildScreenshotPath(screenshotCounter++);
-                    HRESULT saveHr = ImageUtils::SaveTextureAsPNG(frameData.Frame, context.Get(), filename.c_str());
-                    if (SUCCEEDED(saveHr)) {
-                        std::wcout << L"Saved " << filename << L"\n";
-                    } else {
-                        std::cerr << "Failed to save screenshot. HRESULT=0x"
-                                  << std::hex << saveHr << std::dec << "\n";
-                    }
-                }
-                wasSKeyDown = isSKeyDown;
+
+                /*SCREENSHOT BUTTON S TEST*/
+                
+                // bool isSKeyDown = (GetAsyncKeyState('S') & 0x8000) != 0;
+                // if (isSKeyDown && !wasSKeyDown) {
+                //     std::wstring filename = BuildScreenshotPath(screenshotCounter++);
+                //     HRESULT saveHr = ImageUtils::SaveTextureAsPNG(frameData.Frame, context.Get(), filename.c_str());
+                //     if (SUCCEEDED(saveHr)) {
+                //         std::wcout << L"Saved " << filename << L"\n";
+                //     } else {
+                //         std::cerr << "Failed to save screenshot. HRESULT=0x"
+                //                   << std::hex << saveHr << std::dec << "\n";
+                //     }
+                // }
+                // wasSKeyDown = isSKeyDown;
 
                 // Prepare pixels, run ONNX, filter boxes, and return screen coordinates.
                 const auto boxes = detector->Detect(frameData.Frame, context.Get());
