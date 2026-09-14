@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<annotations>
+  <version>1.1</version>
+  <meta>
+    <job>
+      <id>4471918</id>
+      <size>21</size>
+      <mode>annotation</mode>
+      <overlap>0</overlap>
+      <bugtracker></bugtracker>
+      <created>2026-09-13 17:41:04.197226+00:00</created>
+      <updated>2026-09-13 18:27:45.880510+00:00</updated>
+      <subset>default</subset>
+      <start_frame>0</start_frame>
+      <stop_frame>20</stop_frame>
+      <frame_filter></frame_filter>
+      <segments>
+        <segment>
+          <id>4469370</id>
+          <start>0</start>
+          <stop>20</stop>
+          <url>https://app.cvat.ai/api/jobs/4471918/dataset/export/api/jobs/4471918</url>
+        </segment>
+      </segments>
+      <owner>
+        <username>TraderBobDev</username>
+        <email>traderboblk@gmail.com</email>
+      </owner>
+      <assignee></assignee>
+      <labels>
+        <label>
+          <name>enemy_knight</name>
+          <color>#f0b1c5</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>friendly_knight</name>
+          <color>#2f868e</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>enemy_giant</name>
+          <color>#e03475</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>friendly_giant</name>
+          <color>#ec7e22</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>enemy_archers</name>
+          <color>#f78f7e</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>friendly_archers</name>
+          <color>#3f27ce</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+      </labels>
+    </job>
+    <dumped>2026-09-13 18:30:19.392254+00:00</dumped>
+  </meta>
+  <image id="0" name="screenshot_10.png" width="2560" height="1440">
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1041.50" ytl="585.70" xbr="1127.50" ybr="665.00" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1268.61" ytl="570.89" xbr="1368.05" ybr="706.62" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1439.27" ytl="447.26" xbr="1549.47" ybr="550.73" z_order="0">
+    </box>
+  </image>
+  <image id="1" name="screenshot_11.png" width="2560" height="1440">
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1034.80" ytl="587.02" xbr="1132.88" ybr="674.36" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1276.67" ytl="564.17" xbr="1385.52" ybr="707.96" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1441.96" ytl="439.19" xbr="1540.06" ybr="542.67" z_order="0">
+    </box>
+  </image>
+  <image id="2" name="screenshot_12.png" width="2560" height="1440">
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1018.65" ytl="582.98" xbr="1132.88" ybr="685.11" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1279.36" ytl="569.55" xbr="1394.93" ybr="711.99" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1439.27" ytl="429.79" xbr="1544.09" ybr="529.23" z_order="0">
+    </box>
+  </image>
+  <image id="3" name="screenshot_13.png" width="2560" height="1440">
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1024.03" ytl="588.36" xbr="1142.29" ybr="690.49" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1296.83" ytl="564.17" xbr="1394.93" ybr="716.02" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1439.27" ytl="423.07" xbr="1550.81" ybr="527.89" z_order="0">
+    </box>
+  </image>
+  <image id="4" name="screenshot_14.png" width="2560" height="1440">
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1021.34" ytl="621.95" xbr="1068.38" ybr="702.58" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1091.22" ytl="596.42" xbr="1153.04" ybr="663.61" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1303.55" ytl="565.51" xbr="1412.40" ybr="701.24" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1441.96" ytl="410.97" xbr="1548.12" ybr="517.14" z_order="0">
+    </box>
+  </image>
+  <image id="5" name="screenshot_15.png" width="2560" height="1440">
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1021.34" ytl="630.02" xbr="1067.03" ybr="702.58" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1310.27" ytl="564.17" xbr="1416.43" ybr="711.99" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1436.59" ytl="394.85" xbr="1544.09" ybr="505.04" z_order="0">
+    </box>
+  </image>
+  <image id="6" name="screenshot_16.png" width="2560" height="1440">
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1013.28" ytl="638.08" xbr="1068.38" ybr="717.37" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1323.70" ytl="566.86" xbr="1417.77" ybr="702.58" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1441.96" ytl="390.82" xbr="1544.09" ybr="496.98" z_order="0">
+    </box>
+  </image>
+  <image id="7" name="screenshot_17.png" width="2560" height="1440">
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1014.62" ytl="655.55" xbr="1072.41" ybr="724.09" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1331.77" ytl="566.86" xbr="1429.87" ybr="703.93" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1441.96" ytl="381.41" xbr="1538.72" ybr="487.57" z_order="0">
+    </box>
+  </image>
+  <image id="8" name="screenshot_18.png" width="2560" height="1440">
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1017.31" ytl="652.86" xbr="1076.44" ybr="733.49" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1339.83" ytl="568.20" xbr="1450.02" ybr="709.30" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1444.65" ytl="373.35" xbr="1548.12" ybr="475.48" z_order="0">
+    </box>
+  </image>
+  <image id="9" name="screenshot_19.png" width="2560" height="1440">
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1444.65" ytl="362.59" xbr="1540.06" ybr="462.04" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1357.30" ytl="568.20" xbr="1445.99" ybr="702.58" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1020.00" ytl="654.21" xbr="1080.47" ybr="741.56" z_order="0">
+    </box>
+  </image>
+  <image id="10" name="screenshot_20.png" width="2560" height="1440">
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1439.27" ytl="353.19" xbr="1542.75" ybr="456.66" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1018.65" ytl="655.55" xbr="1076.44" ybr="737.52" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1347.89" ytl="568.20" xbr="1463.46" ybr="697.21" z_order="0">
+    </box>
+  </image>
+  <image id="11" name="screenshot_21.png" width="2560" height="1440">
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1432.55" ytl="343.78" xbr="1545.44" ybr="448.60" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1350.58" ytl="565.51" xbr="1472.87" ybr="695.87" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1017.31" ytl="655.55" xbr="1069.72" ybr="733.49" z_order="0">
+    </box>
+  </image>
+  <image id="12" name="screenshot_22.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1396.27" ytl="440.54" xbr="1525.28" ybr="564.17" z_order="0">
+    </box>
+    <box label="enemy_giant" source="manual" occluded="0" xtl="1005.22" ytl="483.54" xbr="1150.35" ybr="632.71" z_order="0">
+    </box>
+  </image>
+  <image id="13" name="screenshot_23.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1396.27" ytl="435.16" xbr="1525.28" ybr="568.20" z_order="0">
+    </box>
+    <box label="enemy_giant" source="manual" occluded="0" xtl="1005.22" ytl="486.23" xbr="1135.57" ybr="617.92" z_order="0">
+    </box>
+  </image>
+  <image id="14" name="screenshot_3.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1230.98" ytl="558.79" xbr="1364.02" ybr="697.21" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1437.93" ytl="526.54" xbr="1541.40" ybr="619.27" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1041.50" ytl="570.89" xbr="1111.38" ybr="635.39" z_order="0">
+    </box>
+  </image>
+  <image id="15" name="screenshot_4.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1235.01" ytl="553.42" xbr="1359.99" ybr="695.87" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1037.47" ytl="578.95" xbr="1123.47" ybr="660.93" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1440.62" ytl="510.42" xbr="1536.03" ybr="607.17" z_order="0">
+    </box>
+  </image>
+  <image id="16" name="screenshot_5.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1233.67" ytl="569.55" xbr="1362.67" ybr="714.68" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1439.27" ytl="519.82" xbr="1540.06" ybr="597.77" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1024.03" ytl="591.05" xbr="1122.13" ybr="670.33" z_order="0">
+    </box>
+  </image>
+  <image id="17" name="screenshot_6.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1225.60" ytl="581.64" xbr="1377.46" ybr="713.34" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1441.96" ytl="502.35" xbr="1545.44" ybr="600.45" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1038.81" ytl="588.36" xbr="1130.19" ybr="670.33" z_order="0">
+    </box>
+  </image>
+  <image id="18" name="screenshot_7.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1236.35" ytl="581.64" xbr="1361.33" ybr="714.68" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1036.12" ytl="587.01" xbr="1136.91" ybr="664.96" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1440.62" ytl="484.88" xbr="1545.44" ybr="581.64" z_order="0">
+    </box>
+  </image>
+  <image id="19" name="screenshot_8.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1230.98" ytl="572.23" xbr="1376.11" ybr="726.77" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1437.93" ytl="468.76" xbr="1544.09" ybr="572.23" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1038.81" ytl="584.33" xbr="1130.19" ybr="666.30" z_order="0">
+    </box>
+  </image>
+  <image id="20" name="screenshot_9.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1255.17" ytl="569.50" xbr="1372.08" ybr="710.65" z_order="0">
+    </box>
+    <box label="enemy_archers" source="manual" occluded="0" xtl="1044.19" ytl="587.01" xbr="1131.54" ybr="663.61" z_order="0">
+    </box>
+    <box label="friendly_knight" source="manual" occluded="0" xtl="1441.96" ytl="464.73" xbr="1549.47" ybr="564.17" z_order="0">
+    </box>
+  </image>
+</annotations>

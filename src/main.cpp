@@ -6,12 +6,14 @@
 #include <vector>             // std::vector
 #include <iostream>           // std::cerr
 #include <chrono>             // sleep_for
-#include <cmath>              // std::sin
 #include <string>             // std::wstring
+#include <memory>
+#include <wrl/client.h>
 
 #include "window_overlay/overlayWindow.h"
 #include "window_capture/duplicationManager.h"
 #include "window_capture/imageUtils.h"
+#include "inference/yoloDetector.h"
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -53,12 +55,28 @@ int FindNextScreenshotIndex() {
 }
 
 int main() {
+    SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+    const std::wstring modelPath = std::wstring(CRASHROYALE_SOURCE_DIR) +
+                                  L"/ml/runs/clashroyale/weights/best.onnx";
+    std::unique_ptr<YoloDetector> detector;
+    try {
+        detector = std::make_unique<YoloDetector>(modelPath);
+        std::wcout << L"Loaded " << modelPath << L"\n";
+    } catch (const std::exception& error) {
+        std::cerr << "Could not load detector: " << error.what() << "\n";
+        return 1;
+    }
+    if (!EnsureScreenshotFolderExists()) {
+        std::cerr << "Failed to create screenshot folder. Error: " << GetLastError() << "\n";
+        return 1;
+    }
     // Create the overlay window object.
     OverlayWindow overlay;
 
     // Initialize the overlay window + Direct2D resources.
     if (!overlay.Initialize()) {
         std::cerr << "Failed to initialize overlay.\n";
+        overlay.Cleanup();
         return -1;
     }
 
@@ -66,10 +84,12 @@ int main() {
     overlay.Show();
 
 
-    // Start the overlay message loop on another thread because MessageLoop() blocks.
-    std::thread captureThread([&overlay]() {
-        ID3D11Device* device = nullptr;
-        ID3D11DeviceContext* context = nullptr;
+    std::atomic<bool> running{true};
+    std::atomic<int> exitCode{0};
+    // The UI stays on the main thread; capture and inference share this worker.
+    std::thread captureThread([&]() {
+        Microsoft::WRL::ComPtr<ID3D11Device> device;
+        Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 
         // Create a D3D11 device for desktop duplication.
         HRESULT hr = D3D11CreateDevice(
@@ -89,6 +109,7 @@ int main() {
         if (FAILED(hr)) {
             std::cerr << "Failed to create D3D11 device. HRESULT=0x"
                     << std::hex << hr << std::dec << "\n";
+            exitCode = 1;
             overlay.Close();
             return;
         }
@@ -97,22 +118,12 @@ int main() {
         DUPLICATIONMANAGER dupl;
 
         // Initialize duplication using the D3D11 device.
-        hr = dupl.Initialize(device);
+        hr = dupl.Initialize(device.Get());
         if (FAILED(hr)) {
             std::cerr << "Failed to initialize duplication manager. HRESULT=0x"
                     << std::hex << hr << std::dec << "\n";
 
-            if (context) context->Release();
-            if (device) device->Release();
-            overlay.Close();
-            return;
-        }
-
-        // This counter is only for moving the demo box around a little.
-        int frameCounter = 0;
-        if (!EnsureScreenshotFolderExists()) {
-            std::cerr << "Failed to create dataset\\raw screenshot folder. Error: "
-                      << GetLastError() << "\n";
+            exitCode = 1;
             overlay.Close();
             return;
         }
@@ -122,7 +133,7 @@ int main() {
 
         // Capture loop:
         // repeatedly grab a desktop frame, then update overlay detections.
-        while (true) {
+        while (running) {
             // If ESC is pressed, leave the loop.
             if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
                 overlay.Close();
@@ -144,6 +155,7 @@ int main() {
             // If duplication access was lost, stop for now.
             if (hr == DXGI_ERROR_ACCESS_LOST) {
                 std::cerr << "Desktop duplication access lost.\n";
+                exitCode = 1;
                 overlay.Close();
                 break;
             }
@@ -152,63 +164,44 @@ int main() {
             if (FAILED(hr)) {
                 std::cerr << "GetFrame failed. HRESULT=0x"
                         << std::hex << hr << std::dec << "\n";
+                exitCode = 1;
                 overlay.Close();
                 break;
             }
 
-            // At this point frameData.Frame contains the captured desktop texture.
-            // You would normally analyze frameData.Frame here and produce detections.
-            bool isSKeyDown = (GetAsyncKeyState('S') & 0x8000) != 0;
-            if (isSKeyDown && !wasSKeyDown) {
-                std::wstring filename = BuildScreenshotPath(screenshotCounter++);
-                HRESULT saveHr = ImageUtils::SaveTextureAsPNG(
-                    frameData.Frame,
-                    context,
-                    filename.c_str()
-                );
-
-                if (SUCCEEDED(saveHr)) {
-                    std::wcout << L"Saved " << filename << L"\n";
-                } else {
-                    std::cerr << "Failed to save screenshot. HRESULT=0x"
-                              << std::hex << saveHr << std::dec << "\n";
+            try {
+                if (!frameData.Frame) throw std::runtime_error("Capture returned no texture.");
+                bool isSKeyDown = (GetAsyncKeyState('S') & 0x8000) != 0;
+                if (isSKeyDown && !wasSKeyDown) {
+                    std::wstring filename = BuildScreenshotPath(screenshotCounter++);
+                    HRESULT saveHr = ImageUtils::SaveTextureAsPNG(frameData.Frame, context.Get(), filename.c_str());
+                    if (SUCCEEDED(saveHr)) {
+                        std::wcout << L"Saved " << filename << L"\n";
+                    } else {
+                        std::cerr << "Failed to save screenshot. HRESULT=0x"
+                                  << std::hex << saveHr << std::dec << "\n";
+                    }
                 }
+                wasSKeyDown = isSKeyDown;
+
+                // Prepare pixels, run ONNX, filter boxes, and return screen coordinates.
+                const auto boxes = detector->Detect(frameData.Frame, context.Get());
+                overlay.UpdateDetections(boxes);
+            } catch (const std::exception& error) {
+                std::cerr << "Detection failed: " << error.what() << "\n";
+                exitCode = 1;
+                running = false;
             }
-            wasSKeyDown = isSKeyDown;
-
-            /*BOX TEST START*/
-
-            // std::vector<DetectionBox> boxes;
-
-            // // Demo box: move it horizontally over time just so you can see updates happen.
-            // DetectionBox box;
-            // box.x = 200.0f + 150.0f * std::sin(frameCounter * 0.05f);
-            // box.y = 200.0f;
-            // box.width = 250.0f;
-            // box.height = 150.0f;
-            // box.label = L"Demo Box";
-            // box.confidence = 1.0f;
-            // box.color = RGB(255, 0, 0);
-
-
-            // boxes.push_back(box);
-
-            // // Send the detections to the overlay for drawing.
-            // overlay.UpdateDetections(boxes);
-
-            /*BOX TEST END*/
 
             // Release the acquired duplication frame.
             hr = dupl.DoneWithFrame();
             if (FAILED(hr)) {
                 std::cerr << "DoneWithFrame failed. HRESULT=0x"
                         << std::hex << hr << std::dec << "\n";
+                exitCode = 1;
                 overlay.Close();
                 break;
             }
-
-            // Advance our demo animation.
-            frameCounter++;
 
             // Small sleep so this loop does not hammer the CPU too hard.
             std::this_thread::sleep_for(std::chrono::milliseconds(16));
@@ -217,23 +210,12 @@ int main() {
         // Clean up duplication resources.
         dupl.Cleanup();
 
-        // Release D3D11 objects.
-        if (context) {
-            context->Release();
-            context = nullptr;
-        }
-
-        if (device) {
-            device->Release();
-            device = nullptr;
-        }
+        overlay.Close();
     });
 
     overlay.MessageLoop();
+    running = false;
     captureThread.join();
-
-    overlay.Close();
-
-
-    return 0;
+    overlay.Cleanup();
+    return exitCode;
 }

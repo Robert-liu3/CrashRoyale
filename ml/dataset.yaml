@@ -3,9 +3,11 @@ path: ../dataset
 train: images/train
 val: images/val
 
-# EXAMPLES: replace these with your annotation classes before training.
 # IDs must match the first number in each YOLO label row.
 names:
-  0: knight
-  1: giant
-  2: archers
+  0: enemy_knight
+  1: friendly_knight
+  2: enemy_giant
+  3: friendly_giant
+  4: enemy_archers
+  5: friendly_archers

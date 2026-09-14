@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<annotations>
+  <version>1.1</version>
+  <meta>
+    <task>
+      <id>2589514</id>
+      <name>CrashRoyale_testing_data_trial</name>
+      <size>7</size>
+      <mode>annotation</mode>
+      <overlap>0</overlap>
+      <bugtracker></bugtracker>
+      <created>2026-09-13 20:24:20.792932+00:00</created>
+      <updated>2026-09-13 20:29:25.148876+00:00</updated>
+      <subset>default</subset>
+      <start_frame>0</start_frame>
+      <stop_frame>6</stop_frame>
+      <frame_filter></frame_filter>
+      <segments>
+        <segment>
+          <id>4469469</id>
+          <start>0</start>
+          <stop>6</stop>
+          <url>https://app.cvat.ai/api/tasks/2589514/dataset/export/api/jobs/4472053</url>
+        </segment>
+      </segments>
+      <owner>
+        <username>TraderBobDev</username>
+        <email>traderboblk@gmail.com</email>
+      </owner>
+      <assignee>
+        <username>TraderBobDev</username>
+        <email>traderboblk@gmail.com</email>
+      </assignee>
+      <labels>
+        <label>
+          <name>enemy_knight</name>
+          <color>#f0b1c5</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>friendly_knight</name>
+          <color>#2f868e</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>enemy_giant</name>
+          <color>#e03475</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>friendly_giant</name>
+          <color>#ec7e22</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>enemy_archers</name>
+          <color>#f78f7e</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+        <label>
+          <name>friendly_archers</name>
+          <color>#3f27ce</color>
+          <type>rectangle</type>
+          <attributes>
+          </attributes>
+        </label>
+      </labels>
+    </task>
+    <dumped>2026-09-13 20:29:39.319724+00:00</dumped>
+  </meta>
+  <image id="0" name="screenshot_24.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1388.47" ytl="426.72" xbr="1525.75" ybr="556.20" z_order="0">
+    </box>
+    <box label="enemy_giant" source="manual" occluded="0" xtl="1006.27" ytl="495.36" xbr="1140.43" ybr="621.72" z_order="0">
+    </box>
+  </image>
+  <image id="1" name="screenshot_25.png" width="2560" height="1440">
+    <box label="enemy_giant" source="manual" occluded="0" xtl="1006.27" ytl="503.16" xbr="1138.87" ybr="632.64" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1388.47" ytl="415.80" xbr="1510.15" ybr="539.04" z_order="0">
+    </box>
+  </image>
+  <image id="2" name="screenshot_26.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1393.15" ytl="409.56" xbr="1508.59" ybr="539.04" z_order="0">
+    </box>
+    <box label="enemy_giant" source="manual" occluded="0" xtl="1004.71" ytl="512.52" xbr="1131.07" ybr="638.88" z_order="0">
+    </box>
+  </image>
+  <image id="3" name="screenshot_27.png" width="2560" height="1440">
+    <box label="enemy_giant" source="manual" occluded="0" xtl="996.91" ytl="520.32" xbr="1126.39" ybr="649.80" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1393.15" ytl="401.76" xbr="1522.63" ybr="526.56" z_order="0">
+    </box>
+  </image>
+  <image id="4" name="screenshot_28.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1393.15" ytl="395.52" xbr="1517.95" ybr="521.88" z_order="0">
+    </box>
+    <box label="enemy_giant" source="manual" occluded="0" xtl="1001.59" ytl="523.44" xbr="1127.95" ybr="654.48" z_order="0">
+    </box>
+  </image>
+  <image id="5" name="screenshot_29.png" width="2560" height="1440">
+    <box label="enemy_giant" source="manual" occluded="0" xtl="1003.15" ytl="532.80" xbr="1134.19" ybr="662.28" z_order="0">
+    </box>
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1386.91" ytl="387.72" xbr="1521.07" ybr="515.64" z_order="0">
+    </box>
+  </image>
+  <image id="6" name="screenshot_30.png" width="2560" height="1440">
+    <box label="friendly_giant" source="manual" occluded="0" xtl="1391.59" ytl="322.20" xbr="1521.07" ybr="450.12" z_order="0">
+    </box>
+    <box label="enemy_giant" source="manual" occluded="0" xtl="1001.59" ytl="620.16" xbr="1134.19" ybr="763.68" z_order="0">
+    </box>
+  </image>
+</annotations>

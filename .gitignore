@@ -1,6 +1,9 @@
 # CMake build directory
 build/
 
+# Downloaded ONNX Runtime SDK
+/third_party/onnxruntime/
+
 # Editor backup files
 *~
 

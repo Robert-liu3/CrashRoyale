@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <d2d1.h>
+#include <dwrite.h>
 #include <vector>
 #include <string>
 #pragma comment(lib, "d2d1.lib")
@@ -42,11 +43,12 @@ private:
     ID2D1Factory* m_pD2DFactory = nullptr;
     ID2D1HwndRenderTarget* m_pRenderTarget = nullptr;
     ID2D1SolidColorBrush* m_pBrush = nullptr;
+    IDWriteFactory* m_pWriteFactory = nullptr;
+    IDWriteTextFormat* m_pTextFormat = nullptr;
     
     // Detection data
     std::vector<DetectionBox> m_detections;
     std::mutex m_detectionMutex; 
-    bool m_needsRedraw = false;
     
     // Window properties
     int m_screenWidth = 0;

@@ -62,6 +62,8 @@ HRESULT DUPLICATIONMANAGER::GetFrame(_Out_ FRAME_DATA* Data)
         return hr;
     }
 
+    frameAcquired = true;
+
     // If still holding old frame, destroy it
     if (AcquiredDesktopImage)
     {
@@ -153,14 +155,15 @@ HRESULT DUPLICATIONMANAGER::GetFrame(_Out_ FRAME_DATA* Data)
 //
 HRESULT DUPLICATIONMANAGER::DoneWithFrame()
 {
+    if (!frameAcquired) return S_OK;
     HRESULT hr = S_OK;
 
     hr = DeskDupl->ReleaseFrame();
+    frameAcquired = false;
     if (FAILED(hr))
     {
         LOG_HR("Failed to release frame in DUPLICATIONMANAGER", hr);
         //DisplayErr(L"Failed to release frame in DUPLICATIONMANAGER", L"Error", hr);
-        return hr;
     }
 
     if (AcquiredDesktopImage)
@@ -174,6 +177,14 @@ HRESULT DUPLICATIONMANAGER::DoneWithFrame()
 
 
 void DUPLICATIONMANAGER::Cleanup() {
+    DoneWithFrame();
+    if (AcquiredDesktopImage) {
+        AcquiredDesktopImage->Release();
+        AcquiredDesktopImage = nullptr;
+    }
+    delete[] MetaDataBuffer;
+    MetaDataBuffer = nullptr;
+    MetaDataSize = 0;
     if (DeskDupl) {
         DeskDupl->Release();
         DeskDupl = nullptr;

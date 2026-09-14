@@ -1,2 +1,3 @@
 ultralytics>=8.4.0,<9.0
 PyYAML>=6.0,<7.0
+Pillow>=8.0

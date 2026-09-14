@@ -16,6 +16,7 @@ struct FRAME_DATA
 class DUPLICATIONMANAGER
 {
 public:
+    ~DUPLICATIONMANAGER() { Cleanup(); }
     HRESULT Initialize(ID3D11Device* device);
     HRESULT GetFrame(FRAME_DATA* Data);
     HRESULT DoneWithFrame();
@@ -27,4 +28,5 @@ private:
 
     BYTE* MetaDataBuffer = nullptr;
     UINT MetaDataSize = 0;
+    bool frameAcquired = false;
 };

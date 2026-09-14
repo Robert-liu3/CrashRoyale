@@ -1,6 +1,9 @@
 #include "overlayWindow.h"
 #include <iostream>
 #include <dwmapi.h>
+#include <algorithm>
+#include <iomanip>
+#include <sstream>
 #pragma comment(lib, "dwmapi.lib")
 
 const wchar_t* CLASS_NAME = L"OverlayWindowClass";
@@ -58,6 +61,12 @@ bool OverlayWindow::CreateOverlayWindow() {
     // Make window transparent
     SetLayeredWindowAttributes(m_hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY | LWA_ALPHA);
 
+    // Do not feed our own detection boxes back into the captured model input.
+    if (!SetWindowDisplayAffinity(m_hwnd, WDA_EXCLUDEFROMCAPTURE)) {
+        std::cerr << "Could not exclude overlay from capture. Error: " << GetLastError() << "\n";
+        return false;
+    }
+
     //todo
     //semi transparent:
 
@@ -93,6 +102,17 @@ bool OverlayWindow::InitializeDirect2D() {
         return false;
     }
     
+    // Detector coordinates are physical pixels, including on scaled displays.
+    m_pRenderTarget->SetDpi(96.0f, 96.0f);
+
+    hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
+                            reinterpret_cast<IUnknown**>(&m_pWriteFactory));
+    if (FAILED(hr)) return false;
+    hr = m_pWriteFactory->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_SEMI_BOLD,
+        DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 14.0f, L"en-us", &m_pTextFormat);
+    if (FAILED(hr)) return false;
+    m_pTextFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
+
     // Create brush for drawing
     hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red), &m_pBrush);
     if (FAILED(hr)) {
@@ -122,9 +142,7 @@ void OverlayWindow::UpdateDetections(const std::vector<DetectionBox>& detections
         std::lock_guard<std::mutex> lock(m_detectionMutex);
         m_detections = detections;
     }
-    m_needsRedraw = true;
-    
-    if (m_hwnd && m_isVisible) {
+    if (m_hwnd) {
         InvalidateRect(m_hwnd, nullptr, FALSE);
     }
 }
@@ -149,7 +167,6 @@ void OverlayWindow::OnPaint() {
         std::cerr << "Failed to end draw. HRESULT=0x" << std::hex << hr << "\n";
     }
     
-    m_needsRedraw = false;
 }
 
 void OverlayWindow::DrawDetectionBox(const DetectionBox& box) {
@@ -165,11 +182,23 @@ void OverlayWindow::DrawDetectionBox(const DetectionBox& box) {
     
     // Draw label background
     if (!box.label.empty()) {
-        D2D1_RECT_F labelRect = D2D1::RectF(box.x, box.y - 25, box.x + box.width, box.y);
-        m_pBrush->SetColor(D2D1::ColorF(0.0f, 0.0f, 0.0f, 0.7f));
+        std::wostringstream text;
+        text << box.label << L" " << std::fixed << std::setprecision(2) << box.confidence;
+        const auto label = text.str();
+        IDWriteTextLayout* layout = nullptr;
+        if (FAILED(m_pWriteFactory->CreateTextLayout(label.c_str(), static_cast<UINT32>(label.size()),
+                m_pTextFormat, float(m_screenWidth), 24.0f, &layout))) return;
+        DWRITE_TEXT_METRICS metrics{};
+        layout->GetMetrics(&metrics);
+        const float width = std::min(float(m_screenWidth), metrics.widthIncludingTrailingWhitespace + 8.0f);
+        const float left = std::clamp(box.x, 0.0f, float(m_screenWidth) - width);
+        const float top = std::clamp(box.y - 24.0f, 0.0f, std::max(0.0f, float(m_screenHeight) - 24.0f));
+        D2D1_RECT_F labelRect = D2D1::RectF(left, top, left + width, top + 24.0f);
+        m_pBrush->SetColor(D2D1::ColorF(0.08f, 0.08f, 0.08f, 1.0f));
         m_pRenderTarget->FillRectangle(labelRect, m_pBrush);
-        
-        // Note: Text drawing would require DirectWrite, keeping it simple for now
+        m_pBrush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+        m_pRenderTarget->DrawTextLayout(D2D1::Point2F(left + 4.0f, top + 2.0f), layout, m_pBrush);
+        layout->Release();
     }
 }
 
@@ -215,6 +244,14 @@ LRESULT CALLBACK OverlayWindow::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
 }
 
 void OverlayWindow::Cleanup() {
+    if (m_pTextFormat) {
+        m_pTextFormat->Release();
+        m_pTextFormat = nullptr;
+    }
+    if (m_pWriteFactory) {
+        m_pWriteFactory->Release();
+        m_pWriteFactory = nullptr;
+    }
     if (m_pBrush) {
         m_pBrush->Release();
         m_pBrush = nullptr;

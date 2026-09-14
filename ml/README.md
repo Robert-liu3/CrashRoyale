@@ -42,7 +42,7 @@ dataset/
       match02_001.txt
 ```
 
-Replace the example classes in `ml/dataset.yaml` with the exact class IDs and
+Match the classes in `ml/dataset.yaml` to the exact class IDs and
 names used by your annotation export. Keep entire matches in one split to avoid
 near-duplicate frames appearing in both training and validation. Reserve separate
 matches for a later test; this starter only uses training and validation data.
@@ -64,6 +64,37 @@ chosen classes. Each split also needs some nonempty annotations. YOLO itself
 permits missing files for background images, but this starter checks more strictly.
 
 See the [official YOLO dataset format](https://docs.ultralytics.com/datasets/detect/).
+
+## Convert a CVAT XML Export
+
+Export annotations as **CVAT for images**. You can reuse the original screenshots
+in `dataset/raw`; downloading the images from CVAT is unnecessary.
+
+Put the XML at `dataset/annotations.xml`, then run:
+
+```powershell
+./ml/.venv/Scripts/python.exe ml/convert_cvat.py --dry-run
+./ml/.venv/Scripts/python.exe ml/convert_cvat.py
+```
+
+The converter checks filenames, original image dimensions, classes, and box
+bounds, then copies only XML-listed images into `dataset/images/train` and writes
+normalized YOLO labels into `dataset/labels/train`. The raw screenshots and XML
+are preserved. Matching output files are left alone on reruns; conflicting files
+cause an error. Only rectangles from image tasks are supported.
+
+An XML image entry without boxes produces an empty label file, so export only
+reviewed images. The converter does not decide whether a box is visually correct.
+
+Use a separate match for validation, keep its screenshot filenames unique, and
+convert its XML with:
+
+```powershell
+./ml/.venv/Scripts/python.exe ml/convert_cvat.py dataset/validation.xml --split val
+```
+
+No random train/validation split is made: consecutive captures of the same match
+would give misleading validation results. Training still needs both splits.
 
 ## Check and Train
 
